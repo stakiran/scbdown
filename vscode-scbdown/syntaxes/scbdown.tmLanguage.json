@@ -12,15 +12,12 @@
   ],
   "repository": {
     "fenced-code-block": {
-      "begin": "^(`{3,})(.*)$",
-      "end": "^(\\1)\\s*$",
+      "begin": "^(`{3,})(.*)",
+      "while": "^(?!\\s*`{3,}\\s*$)",
       "name": "markup.fenced_code.scbdown",
       "beginCaptures": {
         "1": { "name": "punctuation.definition.code.scbdown" },
         "2": { "name": "fenced_code.block.language.scbdown" }
-      },
-      "endCaptures": {
-        "1": { "name": "punctuation.definition.code.scbdown" }
       },
       "contentName": "meta.embedded.block.scbdown"
     },

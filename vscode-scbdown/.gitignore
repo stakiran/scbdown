@@ -1,5 +1,7 @@
 node_modules/
 dist/
 
+*.vsix
+
 samples/*.smd
 !samples/sample.smd

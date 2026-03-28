@@ -86,6 +86,17 @@
         "configuration": "./language-configuration.json"
       }
     ],
+    "configurationDefaults": {
+      "[scbdown]": {
+        "editor.quickSuggestions": {
+          "other": "off",
+          "comments": "off",
+          "strings": "off"
+        },
+        "editor.wordBasedSuggestions": "off",
+        "editor.bracketPairColorization.enabled": false
+      }
+    },
     "grammars": [
       {
         "language": "scbdown",

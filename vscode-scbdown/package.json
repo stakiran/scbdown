@@ -24,6 +24,19 @@
     "esbuild": "^0.19.0"
   },
   "contributes": {
+    "commands": [
+      {
+        "command": "scbdown.openLink",
+        "title": "scbdown: Open Link"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "scbdown.openLink",
+        "key": "shift+enter",
+        "when": "editorTextFocus && editorLangId == scbdown"
+      }
+    ],
     "languages": [
       {
         "id": "scbdown",

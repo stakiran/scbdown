@@ -7,8 +7,7 @@ Cosense記法 + Markdown記法の良いとこどりをした新記法。
 今のところ個人用だが、試せる程度には出来てるはず 2026/03/28 14:03:36
 
 - インストール
-    - vscode-scbdown/README.md のインストール（通常利用）に従えば良い
-    - コンソールで npm などを使う程度は要求する🐰
+    - vscode-scbdown/README.md のインストール（通常利用）に従う、ただしvsixファイルは[Releaseページからもダウンロードできる](https://github.com/stakiran/scbdown/releases)
 - 使い方
     - VSCode で .smd ファイルを開く → ハイライトされるはず
     - 文法:

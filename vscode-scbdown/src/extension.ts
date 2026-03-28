@@ -203,6 +203,49 @@ function updateDecorations() {
     editor.setDecorations(separatorDecorationType, separatorRanges);
 }
 
+// --- アウトライン ---
+
+class ScbdownDocumentSymbolProvider implements vscode.DocumentSymbolProvider {
+    provideDocumentSymbols(doc: vscode.TextDocument): vscode.DocumentSymbol[] {
+        const result: vscode.DocumentSymbol[] = [];
+        const stack: { level: number; symbol: vscode.DocumentSymbol }[] = [];
+
+        for (let i = 0; i < doc.lineCount; i++) {
+            const text = doc.lineAt(i).text;
+            const match = text.match(/^(#{1,6})\s+(.*)/);
+            if (!match) {
+                continue;
+            }
+
+            const level = match[1].length;
+            const name = match[2] || `H${level}`;
+            const range = new vscode.Range(i, 0, i, text.length);
+            const symbol = new vscode.DocumentSymbol(
+                name,
+                '',
+                vscode.SymbolKind.String,
+                range,
+                range,
+            );
+
+            // スタックから現在のレベル以上のものを取り除く
+            while (stack.length > 0 && stack[stack.length - 1].level >= level) {
+                stack.pop();
+            }
+
+            if (stack.length > 0) {
+                stack[stack.length - 1].symbol.children.push(symbol);
+            } else {
+                result.push(symbol);
+            }
+
+            stack.push({ level, symbol });
+        }
+
+        return result;
+    }
+}
+
 // --- activate ---
 
 export function activate(context: vscode.ExtensionContext) {
@@ -234,6 +277,14 @@ export function activate(context: vscode.ExtensionContext) {
     );
 
     updateDecorations();
+
+    // アウトライン
+    context.subscriptions.push(
+        vscode.languages.registerDocumentSymbolProvider(
+            { language: 'scbdown' },
+            new ScbdownDocumentSymbolProvider(),
+        ),
+    );
 
     // リンクを開くコマンド
     const openLinkCommand = vscode.commands.registerCommand('scbdown.openLink', async () => {

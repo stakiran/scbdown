@@ -20,6 +20,19 @@ code --extensionDevelopmentPath=(path)/scbdown/vscode-scbdown (path)/scbdown/vsc
 
 拡張機能が読み込まれた状態で VS Code が起動し、`sample.smd` が開く。
 
+### インストール（通常利用）
+
+```bash
+cd vscode-scbdown
+npm run build
+npx @vscode/vsce package
+code --install-extension scbdown-0.1.0.vsix
+```
+
+`@vscode/vsce` が未インストールの場合は先に `npm install -g @vscode/vsce` しておく。
+
+VS Code 上から入れる場合は `Ctrl+Shift+P` → 「Extensions: Install from VSIX...」で `.vsix` ファイルを選択する。
+
 ### 変更時の再確認
 
 1. コードを修正する

@@ -1,0 +1,34 @@
+{
+  "name": "scbdown",
+  "displayName": "scbdown",
+  "description": "Syntax highlighting for scbdown (.smd) files",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "scbdown",
+        "aliases": [
+          "scbdown",
+          "smd"
+        ],
+        "extensions": [
+          ".smd"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "scbdown",
+        "scopeName": "source.scbdown",
+        "path": "./syntaxes/scbdown.tmLanguage.json"
+      }
+    ]
+  }
+}

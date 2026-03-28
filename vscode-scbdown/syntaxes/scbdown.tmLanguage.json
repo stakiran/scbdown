@@ -1,0 +1,107 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "scbdown",
+  "scopeName": "source.scbdown",
+  "patterns": [
+    { "include": "#fenced-code-block" },
+    { "include": "#heading" },
+    { "include": "#blockquote" },
+    { "include": "#separator" },
+    { "include": "#list-line" },
+    { "include": "#inline" }
+  ],
+  "repository": {
+    "fenced-code-block": {
+      "begin": "^(`{3,})(.*)$",
+      "end": "^(\\1)\\s*$",
+      "name": "markup.fenced_code.scbdown",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.code.scbdown" },
+        "2": { "name": "fenced_code.block.language.scbdown" }
+      },
+      "endCaptures": {
+        "1": { "name": "punctuation.definition.code.scbdown" }
+      },
+      "contentName": "meta.embedded.block.scbdown"
+    },
+    "heading": {
+      "match": "^(#{1,6})\\s+(.*)",
+      "name": "markup.heading.scbdown",
+      "captures": {
+        "1": { "name": "punctuation.definition.heading.scbdown" },
+        "2": {
+          "name": "entity.name.section.scbdown",
+          "patterns": [
+            { "include": "#inline" }
+          ]
+        }
+      }
+    },
+    "blockquote": {
+      "begin": "^(>)\\s?",
+      "end": "$",
+      "name": "markup.quote.scbdown",
+      "beginCaptures": {
+        "1": { "name": "punctuation.definition.quote.scbdown" }
+      },
+      "patterns": [
+        { "include": "#inline" }
+      ]
+    },
+    "separator": {
+      "match": "^[-=].*$",
+      "name": "meta.separator.scbdown"
+    },
+    "list-line": {
+      "begin": "^(?= )",
+      "end": "$",
+      "name": "markup.list.scbdown",
+      "patterns": [
+        { "include": "#inline" }
+      ]
+    },
+    "inline": {
+      "patterns": [
+        { "include": "#inline-code" },
+        { "include": "#image" },
+        { "include": "#icon-link" },
+        { "include": "#link" }
+      ]
+    },
+    "inline-code": {
+      "match": "(`)(.*?)(`)",
+      "name": "markup.inline.raw.scbdown",
+      "captures": {
+        "1": { "name": "punctuation.definition.raw.begin.scbdown" },
+        "3": { "name": "punctuation.definition.raw.end.scbdown" }
+      }
+    },
+    "image": {
+      "match": "(!\\[)([^\\]]*?)(\\])",
+      "name": "markup.underline.image.scbdown",
+      "captures": {
+        "1": { "name": "punctuation.definition.image.begin.scbdown" },
+        "2": { "name": "string.other.image.scbdown" },
+        "3": { "name": "punctuation.definition.image.end.scbdown" }
+      }
+    },
+    "icon-link": {
+      "match": "(\\[)([^\\]\\s]+\\.icon)(\\])",
+      "name": "markup.underline.link.icon.scbdown",
+      "captures": {
+        "1": { "name": "punctuation.definition.link.begin.scbdown" },
+        "2": { "name": "entity.name.tag.icon.scbdown" },
+        "3": { "name": "punctuation.definition.link.end.scbdown" }
+      }
+    },
+    "link": {
+      "match": "(\\[)([^\\]]*)(\\])",
+      "name": "markup.underline.link.scbdown",
+      "captures": {
+        "1": { "name": "punctuation.definition.link.begin.scbdown" },
+        "2": { "name": "string.other.link.scbdown" },
+        "3": { "name": "punctuation.definition.link.end.scbdown" }
+      }
+    }
+  }
+}

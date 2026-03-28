@@ -1,2 +1,5 @@
 node_modules/
 dist/
+
+samples/*.smd
+!samples/sample.smd

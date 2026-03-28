@@ -15,7 +15,7 @@ npm run build
 ### 動作確認
 
 ```bash
-code --extensionDevelopmentPath=(path)/scbdown/vscode-scbdown (path)/scbdown/vscode-scbdown/sample.smd
+code --extensionDevelopmentPath=(path)/scbdown/vscode-scbdown (path)/scbdown/vscode-scbdown/samples/sample.smd
 ```
 
 拡張機能が読み込まれた状態で VS Code が起動し、`sample.smd` が開く。

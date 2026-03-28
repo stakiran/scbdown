@@ -135,6 +135,23 @@ function jumpNext(editor: vscode.TextEditor, targets: number[]) {
     moveCursorTo(editor, targets[0]);
 }
 
+// --- コードブロック判定 ---
+
+function buildCodeBlockSet(doc: vscode.TextDocument): Set<number> {
+    const set = new Set<number>();
+    let inCodeBlock = false;
+    for (let i = 0; i < doc.lineCount; i++) {
+        const text = doc.lineAt(i).text;
+        if (/^`{3,}/.test(text)) {
+            set.add(i);
+            inCodeBlock = !inCodeBlock;
+        } else if (inCodeBlock) {
+            set.add(i);
+        }
+    }
+    return set;
+}
+
 // --- インデント装飾 ---
 
 const INDENT_COLORS = [
@@ -155,8 +172,12 @@ function updateDecorations() {
 
     const decorationsByLevel: vscode.DecorationOptions[][] = INDENT_COLORS.map(() => []);
     const lineCount = editor.document.lineCount;
+    const codeBlockLines = buildCodeBlockSet(editor.document);
 
     for (let i = 0; i < lineCount; i++) {
+        if (codeBlockLines.has(i)) {
+            continue;
+        }
         const line = editor.document.lineAt(i);
         const match = line.text.match(/^( +)/);
         if (match) {

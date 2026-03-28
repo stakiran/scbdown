@@ -9,6 +9,20 @@
   "categories": [
     "Programming Languages"
   ],
+  "main": "./dist/extension.js",
+  "activationEvents": [
+    "onLanguage:scbdown"
+  ],
+  "scripts": {
+    "build": "esbuild src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --platform=node --target=es2020",
+    "watch": "npm run build -- --watch"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.75.0",
+    "@types/node": "^18.0.0",
+    "typescript": "^5.0.0",
+    "esbuild": "^0.19.0"
+  },
   "contributes": {
     "languages": [
       {

@@ -163,6 +163,7 @@ const INDENT_COLORS = [
 ];
 
 let indentDecorationTypes: vscode.TextEditorDecorationType[];
+let separatorDecorationType: vscode.TextEditorDecorationType;
 
 function updateDecorations() {
     const editor = vscode.window.activeTextEditor;
@@ -174,12 +175,21 @@ function updateDecorations() {
     const lineCount = editor.document.lineCount;
     const codeBlockLines = buildCodeBlockSet(editor.document);
 
+    const separatorRanges: vscode.DecorationOptions[] = [];
+
     for (let i = 0; i < lineCount; i++) {
         if (codeBlockLines.has(i)) {
             continue;
         }
         const line = editor.document.lineAt(i);
-        const match = line.text.match(/^( +)/);
+        const text = line.text;
+
+        if (/^[-=]/.test(text)) {
+            separatorRanges.push({ range: new vscode.Range(i, 0, i, text.length) });
+            continue;
+        }
+
+        const match = text.match(/^( +)/);
         if (match) {
             const indentLevel = Math.min(match[1].length, INDENT_COLORS.length) - 1;
             const range = new vscode.Range(i, 0, i, match[1].length);
@@ -190,6 +200,7 @@ function updateDecorations() {
     indentDecorationTypes.forEach((type, level) => {
         editor.setDecorations(type, decorationsByLevel[level]);
     });
+    editor.setDecorations(separatorDecorationType, separatorRanges);
 }
 
 // --- activate ---
@@ -202,8 +213,18 @@ export function activate(context: vscode.ExtensionContext) {
         }),
     );
 
+    // 区切り線装飾
+    separatorDecorationType = vscode.window.createTextEditorDecorationType({
+        backgroundColor: 'rgba(150, 150, 150, 0.15)',
+        borderWidth: '0 0 1px 0',
+        borderStyle: 'solid',
+        borderColor: 'rgba(150, 150, 150, 0.4)',
+        isWholeLine: true,
+    });
+
     context.subscriptions.push(
         ...indentDecorationTypes,
+        separatorDecorationType,
         vscode.window.onDidChangeActiveTextEditor(updateDecorations),
         vscode.workspace.onDidChangeTextDocument((e) => {
             if (e.document === vscode.window.activeTextEditor?.document) {

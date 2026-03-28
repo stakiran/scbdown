@@ -28,12 +28,48 @@
       {
         "command": "scbdown.openLink",
         "title": "scbdown: Open Link"
+      },
+      {
+        "command": "scbdown.previousHeading",
+        "title": "scbdown: Previous Heading"
+      },
+      {
+        "command": "scbdown.nextHeading",
+        "title": "scbdown: Next Heading"
+      },
+      {
+        "command": "scbdown.previousBlock",
+        "title": "scbdown: Previous Block"
+      },
+      {
+        "command": "scbdown.nextBlock",
+        "title": "scbdown: Next Block"
       }
     ],
     "keybindings": [
       {
         "command": "scbdown.openLink",
         "key": "shift+enter",
+        "when": "editorTextFocus && editorLangId == scbdown"
+      },
+      {
+        "command": "scbdown.previousHeading",
+        "key": "alt+up",
+        "when": "editorTextFocus && editorLangId == scbdown"
+      },
+      {
+        "command": "scbdown.nextHeading",
+        "key": "alt+down",
+        "when": "editorTextFocus && editorLangId == scbdown"
+      },
+      {
+        "command": "scbdown.previousBlock",
+        "key": "ctrl+up",
+        "when": "editorTextFocus && editorLangId == scbdown"
+      },
+      {
+        "command": "scbdown.nextBlock",
+        "key": "ctrl+down",
         "when": "editorTextFocus && editorLangId == scbdown"
       }
     ],

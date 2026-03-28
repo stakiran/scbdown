@@ -74,6 +74,67 @@ function findLinkAtCursor(line: string, charPos: number): string | null {
     return null;
 }
 
+// --- ナビゲーション ---
+
+function moveCursorTo(editor: vscode.TextEditor, line: number) {
+    const pos = new vscode.Position(line, 0);
+    editor.selection = new vscode.Selection(pos, pos);
+    editor.revealRange(new vscode.Range(pos, pos), vscode.TextEditorRevealType.InCenter);
+}
+
+function findHeadingLines(doc: vscode.TextDocument): number[] {
+    const lines: number[] = [];
+    for (let i = 0; i < doc.lineCount; i++) {
+        if (/^#{1,6}\s/.test(doc.lineAt(i).text)) {
+            lines.push(i);
+        }
+    }
+    return lines;
+}
+
+function findBlockStartLines(doc: vscode.TextDocument): number[] {
+    const lines: number[] = [];
+    for (let i = 0; i < doc.lineCount; i++) {
+        if (doc.lineAt(i).text.length === 0) {
+            continue;
+        }
+        if (i === 0 || doc.lineAt(i - 1).text.length === 0) {
+            lines.push(i);
+        }
+    }
+    return lines;
+}
+
+function jumpPrevious(editor: vscode.TextEditor, targets: number[]) {
+    if (targets.length === 0) {
+        return;
+    }
+    const current = editor.selection.active.line;
+    for (let i = targets.length - 1; i >= 0; i--) {
+        if (targets[i] < current) {
+            moveCursorTo(editor, targets[i]);
+            return;
+        }
+    }
+    // ループ: 先頭より前 → 末尾へ
+    moveCursorTo(editor, targets[targets.length - 1]);
+}
+
+function jumpNext(editor: vscode.TextEditor, targets: number[]) {
+    if (targets.length === 0) {
+        return;
+    }
+    const current = editor.selection.active.line;
+    for (let i = 0; i < targets.length; i++) {
+        if (targets[i] > current) {
+            moveCursorTo(editor, targets[i]);
+            return;
+        }
+    }
+    // ループ: 末尾より後 → 先頭へ
+    moveCursorTo(editor, targets[0]);
+}
+
 // --- インデント装飾 ---
 
 const INDENT_COLORS = [
@@ -176,6 +237,34 @@ export function activate(context: vscode.ExtensionContext) {
     });
 
     context.subscriptions.push(openLinkCommand);
+
+    // 見出しジャンプ
+    context.subscriptions.push(
+        vscode.commands.registerCommand('scbdown.previousHeading', () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor || editor.document.languageId !== 'scbdown') { return; }
+            jumpPrevious(editor, findHeadingLines(editor.document));
+        }),
+        vscode.commands.registerCommand('scbdown.nextHeading', () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor || editor.document.languageId !== 'scbdown') { return; }
+            jumpNext(editor, findHeadingLines(editor.document));
+        }),
+    );
+
+    // 行塊ジャンプ
+    context.subscriptions.push(
+        vscode.commands.registerCommand('scbdown.previousBlock', () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor || editor.document.languageId !== 'scbdown') { return; }
+            jumpPrevious(editor, findBlockStartLines(editor.document));
+        }),
+        vscode.commands.registerCommand('scbdown.nextBlock', () => {
+            const editor = vscode.window.activeTextEditor;
+            if (!editor || editor.document.languageId !== 'scbdown') { return; }
+            jumpNext(editor, findBlockStartLines(editor.document));
+        }),
+    );
 }
 
 export function deactivate() {}

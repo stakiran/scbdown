@@ -1,7 +1,6 @@
 ---
 name: bump-version
 description: バージョン番号を更新し、package.json と CHANGELOG.md を更新する
-user_invocable: true
 ---
 
 # bump-version

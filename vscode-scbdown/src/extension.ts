@@ -36,6 +36,8 @@ function parseLink(content: string): LinkInfo {
         if (isUrl(last)) {
             return { type: 'external', target: last };
         }
+    } else if (isUrl(content)) {
+        return { type: 'external', target: content };
     }
 
     return { type: 'internal', target: content };
@@ -46,9 +48,6 @@ function parseLink(content: string): LinkInfo {
 function findLinkAtCursor(line: string, charPos: number): string | null {
     for (let start = charPos; start >= 0; start--) {
         if (line[start] === '[') {
-            if (start > 0 && line[start - 1] === '!') {
-                return null; // 画像記法は対象外
-            }
             const end = line.indexOf(']', start + 1);
             if (end !== -1 && charPos <= end) {
                 return line.substring(start + 1, end);
@@ -62,9 +61,6 @@ function findLinkAtCursor(line: string, charPos: number): string | null {
             // カーソルが ] 上 → その ] に対応する [ を探す
             for (let s = start - 1; s >= 0; s--) {
                 if (line[s] === '[') {
-                    if (s > 0 && line[s - 1] === '!') {
-                        return null;
-                    }
                     return line.substring(s + 1, start);
                 }
             }

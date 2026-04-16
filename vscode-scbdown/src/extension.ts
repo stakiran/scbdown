@@ -160,6 +160,7 @@ const INDENT_COLORS = [
 
 let indentDecorationTypes: vscode.TextEditorDecorationType[];
 let separatorDecorationType: vscode.TextEditorDecorationType;
+let blockquoteDecorationType: vscode.TextEditorDecorationType;
 
 function updateDecorations() {
     const editor = vscode.window.activeTextEditor;
@@ -172,6 +173,7 @@ function updateDecorations() {
     const codeBlockLines = buildCodeBlockSet(editor.document);
 
     const separatorRanges: vscode.DecorationOptions[] = [];
+    const blockquoteRanges: vscode.DecorationOptions[] = [];
 
     for (let i = 0; i < lineCount; i++) {
         if (codeBlockLines.has(i)) {
@@ -182,6 +184,11 @@ function updateDecorations() {
 
         if (/^[-=]/.test(text)) {
             separatorRanges.push({ range: new vscode.Range(i, 0, i, text.length) });
+            continue;
+        }
+
+        if (/^>/.test(text)) {
+            blockquoteRanges.push({ range: new vscode.Range(i, 0, i, text.length) });
             continue;
         }
 
@@ -197,6 +204,7 @@ function updateDecorations() {
         editor.setDecorations(type, decorationsByLevel[level]);
     });
     editor.setDecorations(separatorDecorationType, separatorRanges);
+    editor.setDecorations(blockquoteDecorationType, blockquoteRanges);
 }
 
 // --- アウトライン ---
@@ -252,6 +260,15 @@ export function activate(context: vscode.ExtensionContext) {
         }),
     );
 
+    // 引用装飾
+    blockquoteDecorationType = vscode.window.createTextEditorDecorationType({
+        backgroundColor: 'rgba(80, 190, 190, 0.10)',
+        borderWidth: '0 0 0 3px',
+        borderStyle: 'solid',
+        borderColor: 'rgba(80, 190, 190, 0.5)',
+        isWholeLine: true,
+    });
+
     // 区切り線装飾
     separatorDecorationType = vscode.window.createTextEditorDecorationType({
         backgroundColor: 'rgba(150, 150, 150, 0.15)',
@@ -263,6 +280,7 @@ export function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(
         ...indentDecorationTypes,
+        blockquoteDecorationType,
         separatorDecorationType,
         vscode.window.onDidChangeActiveTextEditor(updateDecorations),
         vscode.workspace.onDidChangeTextDocument((e) => {

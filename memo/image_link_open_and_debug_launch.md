@@ -17,10 +17,10 @@
 
 ## デバッグ起動の注意点
 
-### 問題
+### 問題（旧）
 `code --extensionDevelopmentPath=vscode-scbdown`（相対パス）で起動すると、開発版の拡張がロードされず、インストール済みの 0.1.0 が使われてしまう。
 
-### 対処
+### 旧対処（手動コマンド）
 `--extensionDevelopmentPath` には絶対パスを指定する。
 
 ```
@@ -28,3 +28,23 @@ code --extensionDevelopmentPath=D:\work\github\stakiran_sub\scbdown\vscode-scbdo
 ```
 
 後半のファイル引数はシェルが解決するので相対パスでOKだが、`--extensionDevelopmentPath` は VS Code プロセス内部で解決されるため相対パスが正しく動かない。
+
+以下は README に書いてた内容:
+
+```bash
+code --extensionDevelopmentPath=(full-path)/scbdown/vscode-scbdown (path)/scbdown/vscode-scbdown/samples/sample.smd
+```
+
+拡張機能が読み込まれた状態で VS Code が起動し、`sample.smd` が開く。
+
+- Tips-1: extensionDevelopmentPath は絶対パス必須、後半は相対パスでも良さそう
+    - 例: `code -extensionDevelopmentPath=D:\work\github\stakiran_sub\scbdown\vscode-scbdown vscode-scbdown/samples/sample.smd`
+    - memo/image_link_open_and_debug_launch.md も参照
+
+### 現対処（F5デバッグ実行） 2026/04/16
+プロジェクトルートに `.vscode/launch.json` と `.vscode/tasks.json` を追加し、F5 で起動できるようにした。
+
+- `.vscode/launch.json`: `extensionHost` タイプで `--extensionDevelopmentPath` と開くファイルを指定
+- `.vscode/tasks.json`: `vscode-scbdown/` 内で `npm run build` を実行する `preLaunchTask`
+- プロジェクトルート（`scbdown/`）を VSCode で開いた状態で F5 を押すだけでよい
+- `${workspaceFolder}` を使うことで絶対パス問題も解消

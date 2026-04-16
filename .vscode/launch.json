@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "${workspaceFolder}/vscode-scbdown/samples/sample.smd",
+        "--extensionDevelopmentPath=${workspaceFolder}/vscode-scbdown"
+      ],
+      "outFiles": [
+        "${workspaceFolder}/vscode-scbdown/dist/**/*.js"
+      ],
+      "preLaunchTask": "build-extension"
+    }
+  ]
+}

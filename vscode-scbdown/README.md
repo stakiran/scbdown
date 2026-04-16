@@ -15,10 +15,14 @@ npm run build
 ### 動作確認
 
 ```bash
-code --extensionDevelopmentPath=(path)/scbdown/vscode-scbdown (path)/scbdown/vscode-scbdown/samples/sample.smd
+code --extensionDevelopmentPath=(full-path)/scbdown/vscode-scbdown (path)/scbdown/vscode-scbdown/samples/sample.smd
 ```
 
 拡張機能が読み込まれた状態で VS Code が起動し、`sample.smd` が開く。
+
+- Tips-1: extensionDevelopmentPath は絶対パス必須、後半は相対パスでも良さそう
+    - 例: `code -extensionDevelopmentPath=D:\work\github\stakiran_sub\scbdown\vscode-scbdown vscode-scbdown/samples/sample.smd`
+    - memo/image_link_open_and_debug_launch.md も参照
 
 ### インストール（通常利用）
 
